@@ -13,8 +13,16 @@
 
 	%sveltekit.head%
 </head>
+<style>
+	.bodyBackground {
+		background-color: #2d1b69;
+		color: white;
+		min-height: 100vh;
+		margin: 0;
+	}
+</style>
 
-<body data-sveltekit-preload-data="hover">
+<body data-sveltekit-preload-data="hover" class="bodyBackground">
 	<div style="display: contents">%sveltekit.body%</div>
 </body>
 
