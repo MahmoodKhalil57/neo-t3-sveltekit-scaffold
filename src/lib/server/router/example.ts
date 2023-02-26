@@ -13,10 +13,10 @@ export const exampleRouter = t.router({
 
 	greeting: t.procedure.input(z.object({ })).query(async ({ ctx, input }) => {
 		await new Promise((resolve) => setTimeout(resolve, 3000)); // 👈 simulate an expensive operation
-		return {
-      message: `Hello from tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
+		return [
+      `Hello from tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
       name
-    }}),
+    ]}),
 
   setName: t.procedure.input(z.object({ name: z.string().max(10) })).mutation(async ({ ctx, input }) => {
     name = input.name
