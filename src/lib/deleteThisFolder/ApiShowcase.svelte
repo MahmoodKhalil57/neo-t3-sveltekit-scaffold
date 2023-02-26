@@ -1,10 +1,65 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { trpc } from '$lib/client/trpcClient';
+	import { onMount } from 'svelte';
+
+	let trpcWorks = false;
+	let message = 'press the button to load data';
+	let name = '';
+	let inputName = '';
+	let loading = false;
+
+	const setName = async () => {
+		loading = true;
+		await trpc($page).example.setName.mutate({ name: inputName });
+		[message, name] = await trpc($page).example.greeting.query({});
+		loading = false;
+	};
+
+	const getGreeting = async () => {
+		loading = true;
+		[message, name] = await trpc($page).example.greeting.query({});
+		loading = false;
+	};
+
+	const getTrpcWorks = async () => {
+		trpcWorks = await trpc($page).example.testTrpc.query();
+	};
+
+	onMount(() => {
+		getTrpcWorks();
+		getGreeting();
+	});
+</script>
+
 <div class="outer">
-	<div class="notConnected">No Api Libraries Connected</div>
+	{#if trpcWorks}
+		<div class="connected">TRPC Connected Successfully</div>
+		{#if loading}
+			<div class="loading">Loading.... (Three Second Delay)</div>
+		{:else}
+			<div class="trpcResponse">
+				{message}
+				<br />
+				{#if name}
+					Name:{name}
+				{/if}
+			</div>
+		{/if}
+		<div>
+			<input bind:value={inputName} />
+			<button on:click={setName}>Set Name</button>
+		</div>
+	{:else}
+		<div class="notConnected">TRPC not Connected</div>
+	{/if}
 </div>
 
 <style>
 	.outer {
 		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
 		align-items: center;
 		justify-content: center;
 		width: 800px;
@@ -19,6 +74,25 @@
 	}
 	.notConnected {
 		color: rgb(184, 11, 11);
+		font-size: x-large;
+		font-weight: 800;
+	}
+
+	.connected {
+		color: rgb(37, 184, 11);
+		font-size: x-large;
+		font-weight: 800;
+	}
+
+	.trpcResponse {
+		color: rgb(37, 184, 11);
+		font-size: 1.7rem;
+		font-weight: 1000;
+		text-shadow: 0 0 3px rgb(255, 255, 255), 0 0 5px rgb(113, 255, 146);
+	}
+
+	.loading {
+		color: rgb(11, 23, 184);
 		font-size: x-large;
 		font-weight: 800;
 	}
