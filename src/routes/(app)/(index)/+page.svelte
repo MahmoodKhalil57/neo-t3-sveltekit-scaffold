@@ -28,7 +28,7 @@
 	}
 	.titleText {
 		font-size: 3rem;
-		line-height: 2rem;
+		line-height: 5rem;
 	}
 	.svelteFont {
 		font-family: 'Overpass', sans-serif;
