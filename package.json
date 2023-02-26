@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-node": "^1.2.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
@@ -27,5 +28,14 @@
 		"typescript": "^4.9.3",
 		"vite": "^4.0.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@trpc/client": "^10.12.0",
+		"@trpc/server": "^10.12.0",
+		"@types/ws": "^8.5.4",
+		"trpc-sveltekit": "^3.4.2",
+		"trpc-transformer": "^2.2.2",
+		"ws": "^8.12.1",
+		"zod": "^3.20.6"
+	}
 }
