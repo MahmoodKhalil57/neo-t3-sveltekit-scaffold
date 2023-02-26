@@ -6,10 +6,23 @@
 	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 	<meta name="viewport" content="width=device-width" />
 
+	<!-- Import languages -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@500&display=swap" rel="stylesheet">
+
 	%sveltekit.head%
 </head>
+<style>
+	.bodyBackground {
+		background-color: #2d1b69;
+		color: white;
+		min-height: 100vh;
+		margin: 0;
+	}
+</style>
 
-<body data-sveltekit-preload-data="hover">
+<body data-sveltekit-preload-data="hover" class="bodyBackground">
 	<div style="display: contents">%sveltekit.body%</div>
 	<script src="./node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
