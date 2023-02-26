@@ -1,5 +1,10 @@
 <div class="outer">
-	<div class="notConnected">No Css Framework Connected</div>
+	<div class="notConnected !hidden">No Css Framework Connected</div>
+	<div class="Connected text-4xl text-green-600 font-1000 !flex flex-row gap-3">
+		<div class="i-material-symbols-check-circle-rounded" />
+		UnoCss Connected Successfully
+		<div class="i-noto-party-popper" />
+	</div>
 </div>
 
 <style>
@@ -21,5 +26,8 @@
 		color: rgb(184, 11, 11);
 		font-size: x-large;
 		font-weight: 800;
+	}
+	.Connected {
+		display: none;
 	}
 </style>
