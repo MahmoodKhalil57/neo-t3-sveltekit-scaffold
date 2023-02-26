@@ -6,6 +6,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
+    require("daisyui"),
     plugin(function ({ addBase, addComponents }) {
       addBase({
         '.i-base-mono': {
