@@ -1,5 +1,21 @@
+<script lang="ts">
+	import { signIn, signOut } from '@auth/sveltekit/client';
+	import { page } from '$app/stores';
+</script>
+
 <div class="outer">
-	<div class="notConnected">No Api Libraries Connected</div>
+	{#if $page.data.session}
+		{#if $page.data.session.user?.image}
+			<span style="background-image: url('{$page.data.session.user.image}')" class="avatar" />
+		{/if}
+		<span class="signedInText">
+			<small>Signed in as</small><br />
+			<strong>{$page.data.session.user?.name ?? 'User'}</strong>
+		</span>
+		<button on:click={() => signOut()} class="button">Sign out</button>
+	{:else}
+		<button on:click={() => signIn('google')}>Sign In with Google</button>
+	{/if}
 </div>
 
 <style>
@@ -16,6 +32,12 @@
 			rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
 			rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
 			rgba(0, 0, 0, 0.09) 0px 32px 16px;
+	}
+	.avatar {
+		width: 50px;
+		height: 50px;
+		border-radius: 25px;
+		background-size: contain;
 	}
 	.notConnected {
 		color: rgb(184, 11, 11);
