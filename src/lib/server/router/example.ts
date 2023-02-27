@@ -1,10 +1,10 @@
 import type { Context } from '$lib/server/context';
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
+import prisma from '$lib/server/prismaClient'
 
 export const t = initTRPC.context<Context>().create();
 
-let name = "Enter your name"
 
 export const exampleRouter = t.router({
   testTrpc: t.procedure.query(async () => {
@@ -12,14 +12,22 @@ export const exampleRouter = t.router({
 	}),
 
 	greeting: t.procedure.input(z.object({ })).query(async ({ ctx, input }) => {
-		await new Promise((resolve) => setTimeout(resolve, 3000)); // 👈 simulate an expensive operation
+    const page = await prisma.example.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 1,
+    });
+    const name = page?.[0].name
 		return [
-      `Hello from tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
+      `Hello fro+m tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
       name
     ]}),
 
   setName: t.procedure.input(z.object({ name: z.string().max(10) })).mutation(async ({ ctx, input }) => {
-    name = input.name
+    await prisma.example.create({
+      data: {
+        name: input.name
+      },
+    });
 	}),
 });
 

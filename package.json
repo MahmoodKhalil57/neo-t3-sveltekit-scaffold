@@ -22,6 +22,7 @@
 		"eslint-plugin-svelte3": "^4.0.0",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
+		"prisma": "^4.10.1",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
 		"tslib": "^2.4.1",
@@ -36,6 +37,7 @@
 		"trpc-sveltekit": "^3.4.2",
 		"trpc-transformer": "^2.2.2",
 		"ws": "^8.12.1",
-		"zod": "^3.20.6"
+		"zod": "^3.20.6",
+		"@prisma/client": "^4.10.1"
 	}
 }
