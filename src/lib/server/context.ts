@@ -7,8 +7,10 @@ export let data: LayoutData;
 // hence the eslint-disable rule
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function createContext(event: RequestEvent) {
+	const session = await event.locals.getSession()
+	const sessionToken = event.cookies.get("next-auth.session-token")
 	return {
-		example: "Test Context"
+		session, sessionToken
 	};
 }
 

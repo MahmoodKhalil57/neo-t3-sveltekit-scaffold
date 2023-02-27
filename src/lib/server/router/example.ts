@@ -12,22 +12,53 @@ export const exampleRouter = t.router({
 	}),
 
 	greeting: t.procedure.input(z.object({ })).query(async ({ ctx, input }) => {
-    const page = await prisma.example.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 1,
-    });
-    const name = page?.[0]?.name
+
+    let userExampleName = ''
+    const token = ctx.sessionToken
+
+    const session = await prisma.session.findFirst({
+      where: {
+        sessionToken: token
+      }
+    })
+  
+    if(session?.userId){
+      const userExample = await prisma.example.findFirst({
+        where: { userId: session.userId },
+      });
+    
+      userExampleName = userExample?.name ?? "set name to test database"
+    }
 		return [
-      `Hello from tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
-      name
-    ]}),
+      `Hello from tRPC @ ${new Date().toLocaleTimeString()}`,
+      userExampleName
+    ]
+  }),
 
   setName: t.procedure.input(z.object({ name: z.string().max(10) })).mutation(async ({ ctx, input }) => {
-    await prisma.example.create({
-      data: {
-        name: input.name
-      },
-    });
+
+    let isSuccessful = false
+    const token = ctx.sessionToken
+    const session = await prisma.session.findFirst({
+      where: {
+        sessionToken: token
+      }
+    })
+    if(session?.userId){
+      await prisma.example.upsert({
+        where: { userId: session?.userId },
+        // If the user exists, increment `age` by 1
+        update: { name: input.name },
+        // Otherwise create a whole new user object
+        create: {
+          name: input.name,
+          userId: session.userId
+        },
+      });
+      isSuccessful = true
+    } 
+
+   return isSuccessful
 	}),
 });
 
