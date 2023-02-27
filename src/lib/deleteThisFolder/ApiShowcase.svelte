@@ -50,6 +50,7 @@
 			{/if}
 			<button on:click={() => signOut()} class="button">Sign out</button>
 		{:else}
+			Sign In to be able to set and view name
 			<button on:click={() => signIn('google')}>Sign In with Google</button>
 		{/if}
 	</div>
