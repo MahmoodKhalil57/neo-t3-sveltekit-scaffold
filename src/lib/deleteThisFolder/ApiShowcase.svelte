@@ -1,10 +1,59 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+
+	let message = 'press the button to load data';
+	let name = '';
+	let inputName = '';
+	let loading = false;
+
+	const setName = async () => {
+		loading = true;
+		await fetch('/api/prisma', { method: 'POST', body: inputName });
+		[message, name] = await (await fetch('/api/prisma')).json();
+		loading = false;
+	};
+
+	const getGreeting = async () => {
+		loading = true;
+		[message, name] = await (await fetch('/api/prisma')).json();
+		loading = false;
+	};
+
+	onMount(() => {
+		getGreeting();
+	});
+</script>
+
 <div class="outer">
-	<div class="notConnected">No Api Libraries Connected</div>
+	{#if message}
+		<div class="connected">API Connected Successfully</div>
+		{#if loading}
+			<div class="loading">Loading.... (Three Second Delay)</div>
+		{:else}
+			<div class="APIResponse">
+				{message}
+				<br />
+				{#if name}
+					Name:{name}
+				{:else}
+					<span>Set name to test database</span>
+				{/if}
+			</div>
+		{/if}
+		<div>
+			<input bind:value={inputName} />
+			<button on:click={setName}>Set Name</button>
+		</div>
+	{:else}
+		<div class="notConnected">API not Connected</div>
+	{/if}
 </div>
 
 <style>
 	.outer {
 		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
 		align-items: center;
 		justify-content: center;
 		width: 800px;
@@ -19,6 +68,25 @@
 	}
 	.notConnected {
 		color: rgb(184, 11, 11);
+		font-size: x-large;
+		font-weight: 800;
+	}
+
+	.connected {
+		color: rgb(37, 184, 11);
+		font-size: x-large;
+		font-weight: 800;
+	}
+
+	.APIResponse {
+		color: rgb(37, 184, 11);
+		font-size: 1.7rem;
+		font-weight: 1000;
+		text-shadow: 0 0 3px rgb(255, 255, 255), 0 0 5px rgb(113, 255, 146);
+	}
+
+	.loading {
+		color: rgb(11, 23, 184);
 		font-size: x-large;
 		font-weight: 800;
 	}
