@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { trpc } from '$lib/client/trpcClient';
 	import { onMount } from 'svelte';
 
+	let trpcWorks = false;
 	let message = 'press the button to load data';
 	let name = '';
 	let inputName = '';
@@ -8,24 +11,29 @@
 
 	const setName = async () => {
 		loading = true;
-		await fetch('/api/prisma', { method: 'POST', body: inputName });
-		[message, name] = await (await fetch('/api/prisma')).json();
+		await trpc($page).example.setName.mutate({ name: inputName });
+		[message, name] = await trpc($page).example.greeting.query({});
 		loading = false;
 	};
 
 	const getGreeting = async () => {
 		loading = true;
-		[message, name] = await (await fetch('/api/prisma')).json();
+		[message, name] = await trpc($page).example.greeting.query({});
 		loading = false;
 	};
 
+	const getTrpcWorks = async () => {
+		trpcWorks = await trpc($page).example.testTrpc.query();
+	};
+
 	onMount(() => {
+		getTrpcWorks();
 		getGreeting();
 	});
 </script>
 
 <div class="outer">
-	{#if message}
+	{#if trpcWorks}
 		<div class="connected">API Connected Successfully</div>
 		{#if loading}
 			<div class="loading">Loading.... (Three Second Delay)</div>
