@@ -16,9 +16,9 @@ export const exampleRouter = t.router({
       orderBy: { createdAt: "desc" },
       take: 1,
     });
-    const name = page?.[0].name
+    const name = page?.[0]?.name
 		return [
-      `Hello fro+m tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
+      `Hello from tRPC @ ${new Date().toLocaleTimeString()} / ${ctx.example}`,
       name
     ]}),
 
