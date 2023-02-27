@@ -15,6 +15,7 @@ datasource db {
 }
 
 model Example {
-  id     String  @id @default(cuid())
-  Afield String?
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  name      String?
 }
