@@ -103,4 +103,12 @@
 		font-size: x-large;
 		font-weight: 800;
 	}
+
+	.avatar {
+		display: block;
+		width: 50px;
+		height: 50px;
+		border-radius: 25px;
+		background-size: contain;
+	}
 </style>
