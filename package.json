@@ -30,6 +30,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "^4.10.1"
+		"@prisma/client": "^4.10.1",
+		"@auth/core": "^0.5.0",
+		"@auth/sveltekit": "^0.2.2"
 	}
 }
