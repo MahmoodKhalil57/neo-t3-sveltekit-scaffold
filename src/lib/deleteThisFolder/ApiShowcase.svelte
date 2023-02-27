@@ -14,7 +14,6 @@
 		</span>
 		<button on:click={() => signOut()} class="button">Sign out</button>
 	{:else}
-		Sign In to be able to set and view name
 		<button on:click={() => signIn('google')}>Sign In with Google</button>
 	{/if}
 </div>
@@ -44,13 +43,5 @@
 		color: rgb(184, 11, 11);
 		font-size: x-large;
 		font-weight: 800;
-	}
-
-	.avatar {
-		display: block;
-		width: 50px;
-		height: 50px;
-		border-radius: 25px;
-		background-size: contain;
 	}
 </style>
