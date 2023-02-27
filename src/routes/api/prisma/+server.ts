@@ -2,27 +2,52 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import prisma from '$lib/server/prismaClient'
 
-export async function GET() {
-  await new Promise((resolve) => setTimeout(resolve, 3000)); // 👈 simulate an expensive operation
+export const GET = (async (event) => {
+  const token = event.cookies.get("next-auth.session-token")
+  let userExampleName = ''
+  const session = await prisma.session.findFirst({
+    where: {
+      sessionToken: token
+    }
+  })
   const message = `Hello from Backend @ ${new Date().toLocaleTimeString()}`
-  const page = await prisma.example.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 1,
+
+  if(session?.userId){
+  const userExample = await prisma.example.findFirst({
+    where: { userId: session.userId },
   });
-  console.log(page)
-	return json([message, page?.[0]?.name]);
+
+  userExampleName = userExample?.name ?? "set name to test database"
 }
+	return json([message, userExampleName]);
+}) satisfies RequestHandler;
 
 export const POST = (async (event) => {
+  let isSuccessful = false
   const body = await event.request.text();
-  await prisma.example.create({
-    data: {
-      name: body
-    },
-  });
- 
+
+  const token = event.cookies.get("next-auth.session-token")
+  const session = await prisma.session.findFirst({
+    where: {
+      sessionToken: token
+    }
+  })
+  if(session?.userId){
+    await prisma.example.upsert({
+      where: { userId: session?.userId },
+      // If the user exists, increment `age` by 1
+      update: { name: body },
+      // Otherwise create a whole new user object
+      create: {
+        name: body,
+        userId: session.userId
+      },
+    });
+    isSuccessful = true
+  } 
+
+
   return json({
-    // get a specific field's value
-    isSuccessful: true
+    isSuccessful
   });
 }) satisfies RequestHandler;

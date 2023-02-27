@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { signIn, signOut } from '@auth/sveltekit/client';
 
 	let message = 'press the button to load data';
 	let name = '';
@@ -47,6 +49,17 @@
 	{:else}
 		<div class="notConnected">API not Connected</div>
 	{/if}
+	<div class="authJs">
+		{#if $page.data.session}
+			{#if $page.data.session.user?.image}
+				<span style="background-image: url('{$page.data.session.user.image}')" class="avatar" />
+			{/if}
+			<button on:click={() => signOut()} class="button">Sign out</button>
+		{:else}
+			Sign In to be able to set and view name
+			<button on:click={() => signIn('google')}>Sign In with Google</button>
+		{/if}
+	</div>
 </div>
 
 <style>
