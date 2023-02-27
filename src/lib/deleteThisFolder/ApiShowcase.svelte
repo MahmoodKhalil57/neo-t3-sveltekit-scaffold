@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { trpc } from '$lib/client/trpcClient';
 	import { onMount } from 'svelte';
+	import { signIn, signOut } from '@auth/sveltekit/client';
 
 	let trpcWorks = false;
 	let message = 'press the button to load data';
@@ -55,6 +56,17 @@
 	{:else}
 		<div class="notConnected">API not Connected</div>
 	{/if}
+	<div class="authJs">
+		{#if $page.data.session}
+			{#if $page.data.session.user?.image}
+				<span style="background-image: url('{$page.data.session.user.image}')" class="avatar" />
+			{/if}
+			<button on:click={() => signOut()} class="button">Sign out</button>
+		{:else}
+			Sign In to be able to set and view name
+			<button on:click={() => signIn('google')}>Sign In with Google</button>
+		{/if}
+	</div>
 </div>
 
 <style>
@@ -97,5 +109,13 @@
 		color: rgb(11, 23, 184);
 		font-size: x-large;
 		font-weight: 800;
+	}
+
+	.avatar {
+		display: block;
+		width: 50px;
+		height: 50px;
+		border-radius: 25px;
+		background-size: contain;
 	}
 </style>
